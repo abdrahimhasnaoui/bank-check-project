@@ -1,0 +1,120 @@
+<odoo>
+  <data>
+
+    <!-- inherit res.partner model -->
+    <record model="ir.ui.view" id="res_partner_inherit">
+      <field name="name">res.partner.inherit</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="base.view_partner_form"/>
+      <field name="arch" type="xml">
+        <field name="vat" position="after">
+          <field name="classment"/>
+        </field>
+      </field>
+    </record>
+
+
+
+    <!-- explicit list view definition -->
+    <record model="ir.ui.view" id="check_list">
+      <field name="name">check list</field>
+      <field name="model">bank.check</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name_seq"/>
+          <field name="value"/>
+          <field name="check_date"/>
+        </tree>
+      </field>
+    </record>
+
+     <!-- explicit form view definition -->
+    <record model="ir.ui.view" id="check_form">
+      <field name="name">check list</field>
+      <field name="model">bank.check</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <!-- smart button -->
+            <div class="oe_button_box" name="button_box">
+              <button name="open_ventes" type="object" class="oe_stat_button" icon="fa-usd">
+                <field name="ventes_count" string="Ventes" widget="statinfo"/>
+              </button>
+              <button name="open_achats" type="object" class="oe_stat_button" icon="fa-archive">
+                <field name="achats_count" string="Achats" widget="statinfo"/>
+              </button>
+            </div>
+
+            <!-- sequence name -->
+            <div class="oe_title">
+              <h1>
+                <field name="name_seq" readonly="1"/>
+              </h1>
+            </div>
+            <!-- =========== -->
+            <group>
+              <group>
+                <field name="value"/>
+                <field name="check_date"/>
+              </group>
+              <group>
+                <field name="amount_total_outInvoice"/>
+                <field name="amount_total_inInvoice"/>
+                <field name="rest"/>
+              </group>
+            </group>
+
+            <notebook>
+              <page string="List Of Clients">
+                  <field name="clients_ids"/>
+              </page>
+            </notebook>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="check_action_window">
+      <field name="name">check window</field>
+      <field name="res_model">bank.check</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="bank_check.action_server">
+      <field name="name">bank_check server</field>
+      <field name="model_id" ref="model_bank_check_bank_check"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": self._name,
+        }
+      </field>
+    </record>
+    -->
+
+    <!-- Top menu item -->
+  
+    <menuitem name="bank checks" id="bank_check.menu_root" sequence="-1"/>
+    
+    <!-- menu categories -->
+    
+    <menuitem name="Check" id="bank_check" parent="bank_check.menu_root"/>
+   <!-- <menuitem name="Menu 2" id="bank_check.menu_2" parent="bank_check.menu_root"/>
+    -->
+    <!-- actions -->
+   
+    <menuitem name="List OF Checks" id="bank_check_list" parent="bank_check"
+              action="check_action_window"/>
+   <!--  <menuitem name="Server to list" id="bank_check" parent="bank_check.menu_2"
+              action="bank_check.action_server"/>
+    -->
+  </data>
+</odoo>
